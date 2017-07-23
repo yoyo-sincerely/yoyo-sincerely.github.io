@@ -1,0 +1,986 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="先上代码,代码一般是这样的。void Initialization(){     //先从硬盘加载代码再加载到GPU中     string vertexShaderCode = LoadShaderFormFile(VertexShader.shader);     string fragmentShaderCode = LoadShaderFormFile(FragmentShader.sha">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity Shader基础">
+<meta property="og:url" content="http://yoursite.com/2017/07/22/Unity Shader基础/index.html">
+<meta property="og:site_name" content="yoyo&#39;s Blog">
+<meta property="og:description" content="先上代码,代码一般是这样的。void Initialization(){     //先从硬盘加载代码再加载到GPU中     string vertexShaderCode = LoadShaderFormFile(VertexShader.shader);     string fragmentShaderCode = LoadShaderFormFile(FragmentShader.sha">
+<meta property="og:updated_time" content="2017-07-23T12:58:56.081Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity Shader基础">
+<meta name="twitter:description" content="先上代码,代码一般是这样的。void Initialization(){     //先从硬盘加载代码再加载到GPU中     string vertexShaderCode = LoadShaderFormFile(VertexShader.shader);     string fragmentShaderCode = LoadShaderFormFile(FragmentShader.sha">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/22/Unity Shader基础/"/>
+
+
+
+
+
+  <title>Unity Shader基础 | yoyo's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yoyo's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/22/Unity Shader基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yoyo_sincerely">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://ooo.0o0.ooo/2017/06/18/594666ddb40ba.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yoyo's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Unity Shader基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T20:18:46+08:00">
+                2017-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="先上代码-代码一般是这样的。"><a href="#先上代码-代码一般是这样的。" class="headerlink" title="先上代码,代码一般是这样的。"></a>先上代码,代码一般是这样的。</h2><pre><code>void Initialization(){
+    //先从硬盘加载代码再加载到GPU中
+    string vertexShaderCode = LoadShaderFormFile(VertexShader.shader);
+    string fragmentShaderCode = LoadShaderFormFile(FragmentShader.shader);
+    LoadVertexShaderFromString(vertexShaderCode);
+    LoadVertexShaderFromString(fragmentShaderCode);
+
+    //设置各种属性输入
+    SetVertexShaderProperty(&quot;vertexPosition&quot;, vertices);
+    SetVertexShaderProperty(&quot;MainTex&quot;, someTexture);
+    SetVertexShaderProperty(&quot;MVP&quot;, MVP);
+
+    Disable(Blend);            /关闭混合
+    Enable(ZText);            //设置深度测试
+    SetZTextFunction(LessOrEqual);
+    //其他
+}
+void Onrendering(){
+    //调用渲染命令
+    DrawCall();
+}
+</code></pre><p>VertexShader.shader</p>
+<pre><code>in float3 vertexPosition;
+in sampler2D MainTex;
+in Mateix4x4 MVP;
+
+out float4 position;
+
+void main(){
+    position = MVP * vertexPosition;
+}
+</code></pre><p>FragmentShader.shader</p>
+<pre><code>in float4 position;
+
+out float4 fragColor;
+
+void main(){
+    fragColor = float4(1.0, 1.0, 1.0, 1.0);
+}
+</code></pre><h2 id="Unity-Shader-概述"><a href="#Unity-Shader-概述" class="headerlink" title="Unity Shader 概述"></a>Unity Shader 概述</h2><p>Unity中shader需要和材质(Material)】配合使用才能达到需要的效果，一般流程：</p>
+<blockquote>
+<ul>
+<li>创建一个材质</li>
+<li>创建一个Unity Shader，并把它赋给上一步的材质</li>
+<li>把材质赋给给需要渲染的对象</li>
+<li>在材质面板中调整Unity Shader的属性，以得到满意的效果</li>
+</ul>
+</blockquote>
+<p>单独的shader是无法发挥任何作用的，它必须和材质结合起来，才能产生效果。</p>
+<h2 id="ShaderLab"><a href="#ShaderLab" class="headerlink" title="ShaderLab"></a>ShaderLab</h2><p>ShaderLab 是Unity提供的一种专门为Unity Shader服务的语言。</p>
+<p>一般结构如下：</p>
+<pre><code> Shader &quot;Example/Diffuse Simple&quot; {
+    Properties {
+        //属性
+    }
+    SubShader {
+        //显卡A使用的子着色器
+    }
+    SubShader {
+        //显卡B使用的子着色器
+    }
+    Fallback &quot;Diffuse&quot;
+}
+</code></pre><h3 id="材质和Unity-Shader-的桥梁：Properties"><a href="#材质和Unity-Shader-的桥梁：Properties" class="headerlink" title="材质和Unity Shader 的桥梁：Properties"></a>材质和Unity Shader 的桥梁：Properties</h3><p>Properties语义块的定义通常如下：</p>
+<pre><code>Properties {
+    _Name (&quot;Display Name&quot;, PropertyType) = DefaultValue
+}
+</code></pre><p>_Name 是属性的名字，在Shader中访问，通常以一个下划线开始。<br>“Display Name” 是显示的名称，会在材质面板中显示。<br>PropertyType 是指定它的类型，类型表如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性类型</th>
+<th>默认定义语法</th>
+<th>例子              </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Int</td>
+<td>number</td>
+<td>_Int(“Int”, Int) = 2</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>number</td>
+<td>_Float(“Float”, Float) = 1.5</td>
+</tr>
+<tr>
+<td>Range(min, max)</td>
+<td>number</td>
+<td>_Range(“Range”, Range(0.0, 5.0)) = 3.0</td>
+</tr>
+<tr>
+<td>Color</td>
+<td>(number,number,number, number)</td>
+<td>_Color(“Color”, Color) = (1.0, 1.0, 1.0, 1.0)</td>
+</tr>
+<tr>
+<td>Vector</td>
+<td>(number,number,number, number)</td>
+<td>_Vector(“Vector”, Vector) = (2, 3, 4, 5)</td>
+</tr>
+<tr>
+<td>2D</td>
+<td>“defaulttexture”{}</td>
+<td>_2D(“2D”, 2D) = “white” {}</td>
+</tr>
+<tr>
+<td>Cube</td>
+<td>“defaulttexture”{}</td>
+<td>_Cube(“Cube”, Cube) = “white” {}</td>
+</tr>
+<tr>
+<td>3D</td>
+<td>“defaulttexture”{}</td>
+<td>_3D(“3D”, 3D) = “white” {}</td>
+</tr>
+</tbody>
+</table>
+<h3 id="SubShader语义块"><a href="#SubShader语义块" class="headerlink" title="SubShader语义块"></a>SubShader语义块</h3><p>定义模板：</p>
+<pre><code>SubShader {
+    [Tags] //可选
+
+    [RenderSetup]
+
+    Pass {
+    }
+}
+</code></pre><p><strong> 状态设置 </strong></p>
+<p>ShaderLab中常见渲染状态设置选项</p>
+<table>
+<thead>
+<tr>
+<th>状态名称</th>
+<th>设置指令</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cull</td>
+<td>Cull Back/Front/Off</td>
+<td>设置提出模式：剔除背面/正面/关闭剔除</td>
+</tr>
+<tr>
+<td>ZTest</td>
+<td>ZTest Less Greater/LEqual/GEqual/NotEqual/Always</td>
+<td>设置深度测试时使用的函数</td>
+</tr>
+<tr>
+<td>ZWrite</td>
+<td>ZWriteON/Off</td>
+<td>开启/关闭深度写入</td>
+</tr>
+<tr>
+<td>Blend</td>
+<td>Blend SrcFactor DstFactor</td>
+<td>开启并设置混合模式</td>
+</tr>
+</tbody>
+</table>
+<p><strong> SubShader </strong></p>
+<p>SubShader的标签(Tags)是一个键值对(Key/Value Pair),它的键和值都是字符串类型。<br>标签的结构如下：</p>
+<pre><code>Tags { &quot;TagNamel&quot; = &quot;Valuel&quot; &quot;TagName2&quot; = &quot;Value2&quot; }
+</code></pre><p>SubShader的标签列表：</p>
+<table>
+<thead>
+<tr>
+<th>标签类型</th>
+<th>说明</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Queue</td>
+<td>控制渲染顺序</td>
+<td>Tags { “Queue” = “Transparent” }</td>
+</tr>
+<tr>
+<td>RenderType</td>
+<td>对着色器分类</td>
+<td>Tags { “RenderType” = “Opaque” }</td>
+</tr>
+<tr>
+<td>DisableBatching</td>
+<td>Unity的SubShader批处理功能</td>
+<td>Tags { “DisableBatching” = “True”}</td>
+</tr>
+<tr>
+<td>ForceNoShadowCasting</td>
+<td>控制使用该SubShader的物体是否投射阴影</td>
+<td>Tags { “ForceNoShadowCasting” = “True”}</td>
+</tr>
+<tr>
+<td>IgnoreProjector</td>
+<td>使SubShader的物体不受Projector影响。通常用于半透明物体</td>
+<td>Tags { “IgnoreProjector” = “True”}</td>
+</tr>
+<tr>
+<td>CanUseSpriteAtlas</td>
+<td>用于精灵时，设为false</td>
+<td>Tags { “CanUseSpriteAtlas” = “False”}</td>
+</tr>
+<tr>
+<td>PreviewType</td>
+<td>指明材质面板将如何预览该材质</td>
+<td>Tags { “PreviewType” = “Plane”}</td>
+</tr>
+</tbody>
+</table>
+<p><strong> 注意 </strong> 上述标签仅能在SubShader中声明，而不能在Pass中声明。Pass的标签与SubShader不同。</p>
+<p><strong> Pass语义块 </strong></p>
+<p>定义：</p>
+<pre><code>Pass {
+    [Name]
+    [Tags]
+    [RenderSetup]
+    //其他
+}
+</code></pre><p>Pass的标签类型：</p>
+<table>
+<thead>
+<tr>
+<th>标签类型</th>
+<th>说明</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LightMode</td>
+<td>定义该Pass在Unity的渲染流水线中的角色</td>
+<td>Tags { “LightMode” = “ForwordBase”}</td>
+</tr>
+<tr>
+<td>RequireOptions</td>
+<td>用于指定当满足某些条件时才渲染该Pass,它的值是由空格分隔的字符串。目前，Unity只支持SoftVegetation</td>
+<td>Tags { “RequireOptions” = “SoftVegetation”}</td>
+</tr>
+</tbody>
+</table>
+<p><strong> Fallback </strong> </p>
+<p>在SubShader后面的是一个Fallback指令，如果上面的SubShader在显卡上都不能运行，就运行这个最低级的Shader。相当于一个保险。</p>
+<h2 id="Unity-Shader的形式"><a href="#Unity-Shader的形式" class="headerlink" title="Unity Shader的形式"></a>Unity Shader的形式</h2><p>一般有三种Shader：</p>
+<blockquote>
+<ul>
+<li>表面着色器(Surface Shader)</li>
+<li>顶点着色器(Vertex Shader)</li>
+<li>固定函数着色器(Fixed Funtion Shader)</li>
+</ul>
+</blockquote>
+<h3 id="表面着色器"><a href="#表面着色器" class="headerlink" title="表面着色器"></a>表面着色器</h3><p>原来学OpenGL的时候，没听说个有什么表面着色器，因为这是Unity自己创建的一种着色器代码类型。</p>
+<p>来看看官网的一个表面着色器代码：</p>
+<pre><code>Shader &quot;Example/Diffuse Simple&quot; {
+    SubShader {
+        Tags { &quot;RenderType&quot; = &quot;Opaque&quot; }
+        CGPROGRAM
+        #pragma surface surf Lambert
+        struct Input {
+            float4 color : COLOR;
+        };
+        void surf (Input IN, inout SurfaceOutput o) {
+            o.Albedo = 1;
+        }
+        ENDCG
+    }
+    Fallback &quot;Diffuse&quot;
+}
+</code></pre><p>这段代码将材质的表面设置为白色。</p>
+<p>CGPROGRRAM 和 ENDCG之间的代码是使用CG/HLSL编写的，这里需要将CG/HLSL语言嵌套在ShaderLab语言中。值得注意的是，这里的CG/HLSL语言跟原生的CG/HLSL语言有着细微的不同，例如有些原生的函数和用法Unity并没有支持。</p>
+<h3 id="顶点着色器"><a href="#顶点着色器" class="headerlink" title="顶点着色器"></a>顶点着色器</h3><p>格式:</p>
+<pre><code>Shader &quot;VertexAndFragment Shader&quot; {
+      Pass {
+          // ... the usual pass state setup ...
+
+          CGPROGRAM
+          // compilation directives for this snippet, e.g.:
+          #pragma vertex vert
+          #pragma fragment frag
+
+          // the Cg/HLSL code itself
+
+          ENDCG
+          // ... the rest of pass setup ...
+      }    
+}
+</code></pre><h3 id="固定函数着色器"><a href="#固定函数着色器" class="headerlink" title="固定函数着色器"></a>固定函数着色器</h3><p>格式：</p>
+<pre><code>Shader &quot;Basic&quot; {
+    Properties{
+        _Color(&quot;Color&quot;, Color) = (1.0, 0.5, 0.5, 1.0)
+    }
+    SubShader {
+        Pass {
+            Material {
+                Diffuse [_Color]
+            }
+            Lighting On
+        }
+    }
+}
+</code></pre><p>结束语：</p>
+<p>Unity SHader 的选择：</p>
+<blockquote>
+<ul>
+<li>除非你有非常明确的需求必须要使用固定函数着色器，否则别用。</li>
+<li>如果要和各种灯光打交道，可能更需要表面着色器，但需要小心它在移动平台的性能表现。</li>
+<li>如果需要使用的光照数目非常少，顶点着色器是首选。</li>
+<li>最重要的是，如果有很多自定义的渲染效果，那么请选择顶点着色器。</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/22/Unity Shader之渲染流水线/" rel="next" title="Unity Shader 之渲染流水线">
+                <i class="fa fa-chevron-left"></i> Unity Shader 之渲染流水线
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/23/穿越火线手游分析/" rel="prev" title="穿越火线手游分析">
+                穿越火线手游分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://ooo.0o0.ooo/2017/06/18/594666ddb40ba.jpg"
+               alt="yoyo_sincerely" />
+          <p class="site-author-name" itemprop="name">yoyo_sincerely</p>
+           
+              <p class="site-description motion-element" itemprop="description">c++ & python & GameMaker</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+<br>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=29947420&auto=1&height=66"></iframe>
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先上代码-代码一般是这样的。"><span class="nav-number">1.</span> <span class="nav-text">先上代码,代码一般是这样的。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-Shader-概述"><span class="nav-number">2.</span> <span class="nav-text">Unity Shader 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ShaderLab"><span class="nav-number">3.</span> <span class="nav-text">ShaderLab</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#材质和Unity-Shader-的桥梁：Properties"><span class="nav-number">3.1.</span> <span class="nav-text">材质和Unity Shader 的桥梁：Properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SubShader语义块"><span class="nav-number">3.2.</span> <span class="nav-text">SubShader语义块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-Shader的形式"><span class="nav-number">4.</span> <span class="nav-text">Unity Shader的形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表面着色器"><span class="nav-number">4.1.</span> <span class="nav-text">表面着色器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顶点着色器"><span class="nav-number">4.2.</span> <span class="nav-text">顶点着色器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#固定函数着色器"><span class="nav-number">4.3.</span> <span class="nav-text">固定函数着色器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yoyo_sincerely</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

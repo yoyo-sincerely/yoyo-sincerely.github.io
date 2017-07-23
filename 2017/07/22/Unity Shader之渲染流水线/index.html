@@ -93,16 +93,18 @@
 
 
 
-<meta name="description" content="c++ &amp; python &amp; GameMaker">
+<meta name="description" content="什么是渲染流水线一个渲染流程分成3个步骤：   应用阶段(Application stage) 几何阶段(Geometry stage) 光栅化阶段(Rasterizer stage)   CPU 与 GPU之间的通信通信主要包括3个步骤：   把数据加载到显存中 设置渲染状态 调用Draw Call   GPU 流水线 在渲染流水线的几何阶段和光栅化阶段，开发者能做的事情很少，这里制作简单介绍。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity Shader 之渲染流水线">
 <meta property="og:url" content="http://yoursite.com/2017/07/22/Unity Shader之渲染流水线/index.html">
 <meta property="og:site_name" content="yoyo&#39;s Blog">
-<meta property="og:description" content="c++ &amp; python &amp; GameMaker">
-<meta property="og:updated_time" content="2017-07-22T03:55:14.801Z">
+<meta property="og:description" content="什么是渲染流水线一个渲染流程分成3个步骤：   应用阶段(Application stage) 几何阶段(Geometry stage) 光栅化阶段(Rasterizer stage)   CPU 与 GPU之间的通信通信主要包括3个步骤：   把数据加载到显存中 设置渲染状态 调用Draw Call   GPU 流水线 在渲染流水线的几何阶段和光栅化阶段，开发者能做的事情很少，这里制作简单介绍。">
+<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/GPU%E6%B5%81%E6%B0%B4%E7%BA%BF.png?raw=true">
+<meta property="og:updated_time" content="2017-07-23T07:05:13.599Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity Shader 之渲染流水线">
-<meta name="twitter:description" content="c++ &amp; python &amp; GameMaker">
+<meta name="twitter:description" content="什么是渲染流水线一个渲染流程分成3个步骤：   应用阶段(Application stage) 几何阶段(Geometry stage) 光栅化阶段(Rasterizer stage)   CPU 与 GPU之间的通信通信主要包括3个步骤：   把数据加载到显存中 设置渲染状态 调用Draw Call   GPU 流水线 在渲染流水线的几何阶段和光栅化阶段，开发者能做的事情很少，这里制作简单介绍。">
+<meta name="twitter:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/GPU%E6%B5%81%E6%B0%B4%E7%BA%BF.png?raw=true">
 
 
 
@@ -320,7 +322,36 @@
       
 
       
-        
+        <h2 id="什么是渲染流水线"><a href="#什么是渲染流水线" class="headerlink" title="什么是渲染流水线"></a>什么是渲染流水线</h2><p>一个渲染流程分成3个步骤：</p>
+<blockquote>
+<ul>
+<li>应用阶段(Application stage)</li>
+<li>几何阶段(Geometry stage)</li>
+<li>光栅化阶段(Rasterizer stage)</li>
+</ul>
+</blockquote>
+<h2 id="CPU-与-GPU之间的通信"><a href="#CPU-与-GPU之间的通信" class="headerlink" title="CPU 与 GPU之间的通信"></a>CPU 与 GPU之间的通信</h2><p>通信主要包括3个步骤：</p>
+<blockquote>
+<ul>
+<li>把数据加载到显存中</li>
+<li>设置渲染状态</li>
+<li>调用Draw Call</li>
+</ul>
+</blockquote>
+<h2 id="GPU-流水线"><a href="#GPU-流水线" class="headerlink" title="GPU 流水线"></a>GPU 流水线</h2><p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/GPU%E6%B5%81%E6%B0%B4%E7%BA%BF.png?raw=true" alt="GPU流水线示意图"></p>
+<p>在渲染流水线的几何阶段和光栅化阶段，开发者能做的事情很少，这里制作简单介绍。</p>
+<p>GPU的渲染流水线接受顶点数据作为输入。这些顶点数据应用阶段加载到显存中，再由Draw Call指定。随后传递给顶点着色器。</p>
+<p>顶点着色器(Vertex Shader)是完全可编程的，它通常用于实现顶点的空间变换、顶点着色。曲面细分着色器和几何着色器是可选的着色器。接下来时裁剪(Clipping),这一阶段是将那些不再摄像机视野内的顶点裁剪掉。几何着色器的最后阶段是屏幕映射(Screen Mapping)。</p>
+<p>光栅化阶段除了片元着色器是可编程的外，其他都是不可编程的。</p>
+<p>具体来说，shader就是：</p>
+<blockquote>
+<ul>
+<li>GPU流水线上的一些可高度编程的阶段，而由着色器编译出来的最终代码是会在GPU上运行的</li>
+<li>有一些特定类型的着色器，如顶点着色器、片元着色器</li>
+<li>依靠着色器我们可以控制流水线的渲染细节，例如用顶点着色器来进行顶点变换以及传递数据，用片元着色器来进行逐像素的渲染</li>
+</ul>
+</blockquote>
+
       
     </div>
 
@@ -365,6 +396,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/22/Unity Shader基础/" rel="prev" title="Unity Shader基础">
+                Unity Shader基础 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -411,8 +446,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://ooo.0o0.ooo/2017/06/18/594666ddb40ba.jpg"
@@ -427,7 +471,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -459,6 +503,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是渲染流水线"><span class="nav-number">1.</span> <span class="nav-text">什么是渲染流水线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-与-GPU之间的通信"><span class="nav-number">2.</span> <span class="nav-text">CPU 与 GPU之间的通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU-流水线"><span class="nav-number">3.</span> <span class="nav-text">GPU 流水线</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
