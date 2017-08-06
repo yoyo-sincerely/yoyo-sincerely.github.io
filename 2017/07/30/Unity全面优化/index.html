@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言Unity的项目优化已经是老生常谈，很多人在项目完成之后，即便创意新颖，也会觉得差强人意，原因就在于没有做详细的项目优化。众所周知，Unity是一个综合性的3D开发引擎，其中包含图像渲染，逻辑处理，数据存储，发布测试等等各方面的内容。因此Unity各个方面都存在的待优化的内容，也可以说项目优化是项目开发中必不可少的一项工作。本篇文章会从项目的各个方面分析Unity待优化的内容，并给出优化方案，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity全面优化">
+<meta property="og:url" content="http://yoursite.com/2017/07/30/Unity全面优化/index.html">
+<meta property="og:site_name" content="yoyo&#39;s Blog">
+<meta property="og:description" content="前言Unity的项目优化已经是老生常谈，很多人在项目完成之后，即便创意新颖，也会觉得差强人意，原因就在于没有做详细的项目优化。众所周知，Unity是一个综合性的3D开发引擎，其中包含图像渲染，逻辑处理，数据存储，发布测试等等各方面的内容。因此Unity各个方面都存在的待优化的内容，也可以说项目优化是项目开发中必不可少的一项工作。本篇文章会从项目的各个方面分析Unity待优化的内容，并给出优化方案，">
+<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/unity%E4%BC%98%E5%8C%96.png?raw=true">
+<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/static.png?raw=true">
+<meta property="og:updated_time" content="2017-07-31T10:45:33.981Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity全面优化">
+<meta name="twitter:description" content="前言Unity的项目优化已经是老生常谈，很多人在项目完成之后，即便创意新颖，也会觉得差强人意，原因就在于没有做详细的项目优化。众所周知，Unity是一个综合性的3D开发引擎，其中包含图像渲染，逻辑处理，数据存储，发布测试等等各方面的内容。因此Unity各个方面都存在的待优化的内容，也可以说项目优化是项目开发中必不可少的一项工作。本篇文章会从项目的各个方面分析Unity待优化的内容，并给出优化方案，">
+<meta name="twitter:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/unity%E4%BC%98%E5%8C%96.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/30/Unity全面优化/"/>
+
+
+
+
+
+  <title>Unity全面优化 | yoyo's Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yoyo's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+        本站总访问量<span id="busuanzi_value_site_pv"></span>次
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/30/Unity全面优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yoyo_sincerely">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/%E9%85%92%E4%BB%99.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yoyo's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Unity全面优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-30T11:23:18+08:00">
+                2017-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index">
+                    <span itemprop="name">Unity</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Unity的项目优化已经是老生常谈，很多人在项目完成之后，即便创意新颖，也会觉得差强人意，原因就在于没有做详细的项目优化。众所周知，Unity是一个综合性的3D开发引擎，其中包含图像渲染，逻辑处理，数据存储，发布测试等等各方面的内容。因此Unity各个方面都存在的待优化的内容，也可以说项目优化是项目开发中必不可少的一项工作。本篇文章会从项目的各个方面分析Unity待优化的内容，并给出优化方案，全面优化你的项目。优化项目无非是减轻系统的功耗负担，故下面从CPU、GPU、内存三方面的优化来讲解。</p>
+<p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/unity%E4%BC%98%E5%8C%96.png?raw=true" alt="unity优化"></p>
+<h1 id="CPU优化"><a href="#CPU优化" class="headerlink" title="CPU优化"></a>CPU优化</h1><h2 id="Draw-Calls"><a href="#Draw-Calls" class="headerlink" title="Draw Calls"></a>Draw Calls</h2><p>Draw Call Batching(批处理)<br>两个或多个纹理相同或材质相同的网格模型可以批量处理他们的材质，这样就可以将多个模型的材质DrawCall合并为一个，从而达到减少DrawCall的目的。批处理是系统工作范畴，我们只需要选择即可，批处理又分为静态批处理和动态批处理。</p>
+<h3 id="Static-Batching-静态批处理"><a href="#Static-Batching-静态批处理" class="headerlink" title="Static Batching 静态批处理"></a>Static Batching 静态批处理</h3><p>场景中有很多游戏对象，其中静态对象（Inspector勾选Static的）可以通过静态批处理来优化DrawCall。<br><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/static.png?raw=true" alt="static"></p>
+<p>下面我们通过具体实例来验证：<br>在场景中创建多个游戏对象Cube，Sphere, Capsule, Cylinder，默认为静态。此时运行游戏，DrawCall如下。</p>
+<p><img src="" alt="save as batching"></p>
+<h3 id="Dynamic-Batching-动态批处理"><a href="#Dynamic-Batching-动态批处理" class="headerlink" title="Dynamic Batching 动态批处理"></a>Dynamic Batching 动态批处理</h3><p>上面的静态批处理需要给对象设置成静态，而动态批处理，则不需要，非静态的对象，系统自动做批处理。<br>同样，我们举例说明，通过预设体创建25个cube。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">for (int y = 0; y &lt; 5; y++)</div><div class="line">        &#123;</div><div class="line">            for (int x = 0; x &lt; 5; x++)</div><div class="line">            &#123;</div><div class="line">                transform.position = new Vector3(x*3, y*3, 10);</div><div class="line">                Instantiate(cu, transform.position, transform.rotation);</div><div class="line">            &#125;</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p><img src="" alt=""></p>
+<p>不过动态批处理的约束挺多的：</p>
+<blockquote>
+<ul>
+<li>批处理动态物体需要在每个顶点上进行一定的开销，所以动态批处理仅支持小于900顶点的网格物体。<br>如果你的着色器使用顶点位置，法线和UV值三种属性，那么你只能批处理300顶点以下的物体；如果你的着色器需要使用顶点位置，法线，UV0，UV1和切向量，那你&gt;- 只能批处理180顶点以下的物体。</li>
+<li>不要使用缩放。分别拥有缩放大小(1,1,1) 和(2,2,2)的两个物体将不会进行批处理。</li>
+<li>统一缩放的物体不会与非统一缩放的物体进行批处理。</li>
+<li>使用缩放尺度(1,1,1) 和 (1,2,1)的两个物体将不会进行批处理，但是使用缩放尺度(1,2,1) 和(1,3,1)的两个物体将可以进行批处理。</li>
+<li>使用不同材质的实例化物体（instance）将会导致批处理失败。<br>拥有lightmap的物体含有额外（隐藏）的材质属性，比如：lightmap的偏移和缩放系数等。所以，拥有lightmap的物体将不会进行批处理（除非他们指向lightmap的同一部分）。</li>
+<li>多通道的shader会妨碍批处理操作。比如，几乎unity中所有的着色器在前向渲染中都支持多个光源，并为它们有效地开辟多个通道。</li>
+<li>预设体的实例会自动地使用相同的网格模型和材质。</li>
+</ul>
+</blockquote>
+<h3 id="打包图集"><a href="#打包图集" class="headerlink" title="打包图集"></a>打包图集</h3><p>每个材质/纹理的渲染一定是会产生DrawCall的，这个DrawCall只能通过打包图集来进行优化</p>
+<p><strong> 图集一般遵循几个规则： </strong></p>
+<blockquote>
+<ul>
+<li><p>从功能角度进行划分，例如UI可以划分为公共部分，以及每个具体的界面，功能上，显示上密切相关的图片打包到一起</p>
+</li>
+<li><p>不要一股脑把所有东西打包到一个图集里，特别是那些不可能同时出现的东西，它们就不应该在一个图集里，这样的图集意义不大，减少不了DrawCall，并且一个你不需要显示的图片，会一直占用你的内存，这让我非常不爽</p>
+</li>
+<li><p>注意控制图集的大小，不要让图集太大，一个超级大图集的DrawCall消耗或许顶的上十几个小图集的消耗</p>
+</li>
+<li><p>字符图集，在使用BMFont或者其他工具生成图片字的时候，我们往往是直接导入一大串文字，然后直接生成图片，但实际上这上面的操作也有优化空间，例如BMFont生成的图片大小，是可以设置的，有两个规则，一个规则是导出的图片尽量小，另一个是导出的图片尽量少，默认的大小应该是512x512，假设你生成的图片256x256就可以容纳，那么多做一个操作你可以节省这么多空间，另外当你输入多几个字，就导致增加一张图片时，例如1024变成2048，那么你可以考虑使用3张512的图片，这样也会节省空间</p>
+</li>
+<li><p>经过精心划分的图集在加上精心规划的渲染顺序，DrawCall会有一个质的优化</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="物理组件"><a href="#物理组件" class="headerlink" title="物理组件"></a>物理组件</h2><p>物理组件是我们在游戏开发中经常用到的组件，比起设计超级复杂的伤害计算算法，一个Trigger就能解决很多问题，还有那可以模拟一切物理效果的Rigidbody。但如果物理组件使用过多，计算量过大，也会造成CPU过载。对于物理组件的优化，有以下两点。</p>
+<ul>
+<li>设置一个合适的Fixed Timestep。</li>
+</ul>
+<p>我们都知道在计算物理逻辑的时候通常会将代码放到FixedUpdate里面，然而FixedUpdate的执行频率，就由Fixed Timestep决定，并不是所有的游戏中物理计算都需要0.02秒执行一次。因此这个值，可以针对项目慢慢调试，设置出一个比较合适的值，这样即完成了物理计算，也可以减轻CPU的负担。所以，想想自己上高中物理的时候做的物理大题，让CPU少做几道，确实可以轻松很多。换位思考也可以这样对吧，换到CPU的角度考虑。</p>
+<h2 id="GC-Garbage-Collection垃圾回收"><a href="#GC-Garbage-Collection垃圾回收" class="headerlink" title="GC(Garbage Collection垃圾回收)"></a>GC(Garbage Collection垃圾回收)</h2><p>GC是用来处理内存的，为什么会影响到CPU的开销呢？因为GC是CPU调度的。大量的调用GC确实可以回收内存，但如果内存占用量不是很大的情况下，调用GC的性价比就很低，因为GC对CPU的开销所造成的代价更大。所以优化GC，就是减少对GC的调用。</p>
+<p>那么GC什么时候会触发呢？两种情况：</p>
+<blockquote>
+<p>首先当然是我们的堆的内存不足时，会自动调用GC。<br>其次呢，作为编程人员，我们自己也可以手动的调用GC。<br>所以为了达到优化CPU的目的，我们就不能频繁的触发GC。<br>而上文也说了GC处理的是托管堆，而不是Unity3D引擎的那些资源，<br>所以GC的优化说白了也就是代码的优化。</p>
+</blockquote>
+<h2 id="代码质量"><a href="#代码质量" class="headerlink" title="代码质量"></a>代码质量</h2><p>以物体的Transform组件为例，我们应该只访问一次，之后就将它的引用保留，而非每次使用都去访问。这里有人做过一个小实验，就是对比通过方法GetComponent<transform>()获取Transform组件, 通过MonoBehavor的transform属性去取，以及保留引用之后再去访问所需要的时间:<br>1.GetComponent = 619ms<br>2.Monobehaviour = 60ms<br>3.CachedMB = 8ms<br>4.Manual Cache = 3ms<br>所以最好不要频繁使用GetComponent，尤其是在循环中。<br>善于使用OnBecameVisible()和OnBecameVisible(),来控制物体的update()函数的执行以减少开销。<br>使用内建的数组，比如用Vector3.zero而不是new Vector(0, 0, 0);<br>对于方法的参数的优化：善于使用ref关键字。值类型的参数，是通过将实参的值复制到形参，来实现按值传递到方法，也就是我们通常说的按值传递。复制嘛，总会让人感觉很笨重。比如Matrix4x4这样比较复杂的值类型，如果直接复制一份新的，反而不如将值类型的引用传递给方法作为参数。</transform></p>
+<h1 id="GPU优化"><a href="#GPU优化" class="headerlink" title="GPU优化"></a>GPU优化</h1><p>GPU主要处理图像渲染，与CPU不同，侧重点自然也不同。GPU需要优化的点主要有以下几点：</p>
+<blockquote>
+<ul>
+<li>填充率，可以简单的理解为图形处理单元每秒渲染的像素数量。</li>
+<li>像素的复杂度，比如动态阴影，光照，复杂的shader等等</li>
+<li>几何体的复杂度（顶点数量）</li>
+<li>GPU的显存带宽</li>
+</ul>
+</blockquote>
+<h2 id="减少绘制的数目"><a href="#减少绘制的数目" class="headerlink" title="减少绘制的数目"></a>减少绘制的数目</h2><p>减少顶点数量，简化复杂度，举措如下。</p>
+<blockquote>
+<ul>
+<li>保持材质的数目尽可能少。这使得Unity更容易进行批处理。</li>
+<li>使用纹理图集（一张大贴图里包含了很多子贴图）来代替一系列单独的小贴图。它们可以更快地被加载，具有很少的状态转换，而且批处理更友好。</li>
+<li>如果使用了纹理图集和共享材质，使用Renderer.sharedMaterial 来代替Renderer.material 。</li>
+<li>使用光照纹理(lightmap)而非实时灯光。</li>
+<li>使用LOD，好处就是对那些离得远，看不清的物体的细节可以忽略。</li>
+<li>遮挡剔除（Occlusion culling）</li>
+<li>使用mobile版的shader，简单。</li>
+</ul>
+</blockquote>
+<h2 id="优化显存带宽"><a href="#优化显存带宽" class="headerlink" title="优化显存带宽"></a>优化显存带宽</h2><p>压缩图片，减小显存带宽的压力</p>
+<blockquote>
+<ul>
+<li>OpenGL ES 2.0使用ETC1格式压缩等等，在打包设置那里都有。</li>
+<li>使用MipMap。<br>Mipmap中每一个层级的小图都是主图的一个特定比例的缩小细节的复制品。因为存了主图和它的那些缩小的复制品，所以内存占用会比之前大。但是为何又优化了显存带宽呢？因为可以根据实际情况，选择适合的小图来渲染。所以，虽然会消耗一些内存，但是为了图片渲染的质量（比压缩要好），这种方式也是推荐的。</li>
+</ul>
+</blockquote>
+<h1 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h1><blockquote>
+<ul>
+<li>Unity3D内部的内存</li>
+<li>Mono的托管内存</li>
+<li>若干我们自己引入的DLL或者第三方DLL所需要的内存。</li>
+</ul>
+</blockquote>
+<h2 id="Unity内部内存"><a href="#Unity内部内存" class="headerlink" title="Unity内部内存"></a>Unity内部内存</h2><p>Unity3D的内部内存都会存放一些什么呢？</p>
+<blockquote>
+<ul>
+<li>资源：纹理、网格、音频等等</li>
+<li>GameObject和各种组件。</li>
+<li>引擎内部逻辑需要的内存：渲染器，物理系统，粒子系统等等</li>
+</ul>
+</blockquote>
+<h2 id="mono托管内存"><a href="#mono托管内存" class="headerlink" title="mono托管内存"></a>mono托管内存</h2><p>因为我们的游戏脚本是用C#写的，同时还要跨平台，所以带着一个Mono的托管环境显然必须的。那么Mono的托管内存自然就不得不放到内存的优化范畴中进行考虑。那么我们所说的Mono托管内存中存放的东西和Unity3D内部内存中存放的东西究竟有何不同呢？其实Mono的内存分配就是很传统的运行时内存的分配了：</p>
+<blockquote>
+<ul>
+<li>值类型：int型啦，float型啦，结构体struct啦，bool啦之类的。它们都存放在堆栈上（注意额，不是堆所以不涉及GC）。</li>
+<li>引用类型：其实可以狭义的理解为各种类的实例。比如游戏脚本中对游戏引擎各种控件的封装。其实很好理解，C#中肯定要有对应的类去对应游戏引擎中的控件。那么这部分就是C#中的封装。由于是在堆上分配，所以会涉及到GC。</li>
+</ul>
+</blockquote>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><blockquote>
+<p>项目优化至关重要，因为现在的产品大同小异的很多，游戏也是如此，无非就是那么几种类型，在保持创新精神的基础上，还要着重关注的就是用户体验。用户体验这个词不是新词了，所以怎样提高用户体验呢，流畅、明朗、便捷。当然，这些都取决与项目优化。所以，是你的产品就好好优化它，因为每个产品都可以变得更好。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/Unity3D游戏资源提取工具与实测/" rel="next" title="Unity3D游戏资源提取工具与实测">
+                <i class="fa fa-chevron-left"></i> Unity3D游戏资源提取工具与实测
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/02/正则表达式/" rel="prev" title="正则表达式">
+                正则表达式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/yoyo-sincerely/MyPic/blob/master/%E9%85%92%E4%BB%99.jpg?raw=true"
+               alt="yoyo_sincerely" />
+          <p class="site-author-name" itemprop="name">yoyo_sincerely</p>
+           
+              <p class="site-description motion-element" itemprop="description">c++ & python & GameMaker</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/Tools/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+<br>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=29947420&auto=1&height=66"></iframe>
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU优化"><span class="nav-number">2.</span> <span class="nav-text">CPU优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Draw-Calls"><span class="nav-number">2.1.</span> <span class="nav-text">Draw Calls</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Static-Batching-静态批处理"><span class="nav-number">2.1.1.</span> <span class="nav-text">Static Batching 静态批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic-Batching-动态批处理"><span class="nav-number">2.1.2.</span> <span class="nav-text">Dynamic Batching 动态批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包图集"><span class="nav-number">2.1.3.</span> <span class="nav-text">打包图集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理组件"><span class="nav-number">2.2.</span> <span class="nav-text">物理组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-Garbage-Collection垃圾回收"><span class="nav-number">2.3.</span> <span class="nav-text">GC(Garbage Collection垃圾回收)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码质量"><span class="nav-number">2.4.</span> <span class="nav-text">代码质量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPU优化"><span class="nav-number">3.</span> <span class="nav-text">GPU优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#减少绘制的数目"><span class="nav-number">3.1.</span> <span class="nav-text">减少绘制的数目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化显存带宽"><span class="nav-number">3.2.</span> <span class="nav-text">优化显存带宽</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存优化"><span class="nav-number">4.</span> <span class="nav-text">内存优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity内部内存"><span class="nav-number">4.1.</span> <span class="nav-text">Unity内部内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mono托管内存"><span class="nav-number">4.2.</span> <span class="nav-text">mono托管内存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yoyo_sincerely</span>
+  <span id="busuanzi_container_site_pv">
+     博客总访问量：<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
