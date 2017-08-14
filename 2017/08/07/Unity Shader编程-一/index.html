@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="工具," />
+  <meta name="keywords" content="Unity Shader," />
 
 
 
@@ -93,22 +93,20 @@
 
 
 
-<meta name="description" content="前言这几天一直缺素材，然后想到从apk中提取点。嘿嘿。这里总结一下找到的一些素材提取工具，以及其效果。   Disunity UnityAssetsExplorer UnityStudio UnityAssetsBundleExtractor 图片转换插件PowerVR Tools   Disunity古老的开源工具，好像已经停止更新了，不支持unity5.x的版本。 UnityAssetsExp">
-<meta name="keywords" content="工具">
+<meta name="description" content="模拟现实世界的光照在模拟真实的光照环境时，需要考虑3种物理现象。   首先，光线从光源(light source)中被发射出来 然后，光线和场景中的物体相交：一些被物体吸收了，而另一些光线被散射到其他方向。 最后，摄像机吸收了一些光，产生了一张图片。   标准光照模型在1975年，著名学者裴祥风(Bui Toung Phong)提出了标准光照模型背后的基本理念。标准光照模型只关心直接光照(dire">
+<meta name="keywords" content="Unity Shader">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Unity3D游戏资源提取工具与实测">
-<meta property="og:url" content="http://yoursite.com/2017/07/25/Unity3D游戏资源提取工具与实测/index.html">
+<meta property="og:title" content="Unity中的基础光照">
+<meta property="og:url" content="http://yoursite.com/2017/08/07/Unity Shader编程-一/index.html">
 <meta property="og:site_name" content="yoyo&#39;s Blog">
-<meta property="og:description" content="前言这几天一直缺素材，然后想到从apk中提取点。嘿嘿。这里总结一下找到的一些素材提取工具，以及其效果。   Disunity UnityAssetsExplorer UnityStudio UnityAssetsBundleExtractor 图片转换插件PowerVR Tools   Disunity古老的开源工具，好像已经停止更新了，不支持unity5.x的版本。 UnityAssetsExp">
-<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/disunity.png?raw=true">
-<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/UnityAssetsExplorer.png?raw=true">
-<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/UnityStudioPic.png?raw=true">
-<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/UnityAssetsBundleExtractor.png?raw=true">
-<meta property="og:updated_time" content="2017-07-25T14:29:21.529Z">
+<meta property="og:description" content="模拟现实世界的光照在模拟真实的光照环境时，需要考虑3种物理现象。   首先，光线从光源(light source)中被发射出来 然后，光线和场景中的物体相交：一些被物体吸收了，而另一些光线被散射到其他方向。 最后，摄像机吸收了一些光，产生了一张图片。   标准光照模型在1975年，著名学者裴祥风(Bui Toung Phong)提出了标准光照模型背后的基本理念。标准光照模型只关心直接光照(dire">
+<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/Phong%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E9%AB%98%E5%85%89%E5%8F%8D%E5%B0%84.png?raw=true">
+<meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/Ambient.png?raw=true">
+<meta property="og:updated_time" content="2017-08-09T06:13:17.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity3D游戏资源提取工具与实测">
-<meta name="twitter:description" content="前言这几天一直缺素材，然后想到从apk中提取点。嘿嘿。这里总结一下找到的一些素材提取工具，以及其效果。   Disunity UnityAssetsExplorer UnityStudio UnityAssetsBundleExtractor 图片转换插件PowerVR Tools   Disunity古老的开源工具，好像已经停止更新了，不支持unity5.x的版本。 UnityAssetsExp">
-<meta name="twitter:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/disunity.png?raw=true">
+<meta name="twitter:title" content="Unity中的基础光照">
+<meta name="twitter:description" content="模拟现实世界的光照在模拟真实的光照环境时，需要考虑3种物理现象。   首先，光线从光源(light source)中被发射出来 然后，光线和场景中的物体相交：一些被物体吸收了，而另一些光线被散射到其他方向。 最后，摄像机吸收了一些光，产生了一张图片。   标准光照模型在1975年，著名学者裴祥风(Bui Toung Phong)提出了标准光照模型背后的基本理念。标准光照模型只关心直接光照(dire">
+<meta name="twitter:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/Phong%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E9%AB%98%E5%85%89%E5%8F%8D%E5%B0%84.png?raw=true">
 
 
 
@@ -136,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/25/Unity3D游戏资源提取工具与实测/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/08/07/Unity Shader编程-一/"/>
 
 
 
 
 
-  <title>Unity3D游戏资源提取工具与实测 | yoyo's Blog</title>
+  <title>Unity中的基础光照 | yoyo's Blog</title>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
@@ -265,7 +263,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/Unity3D游戏资源提取工具与实测/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/Unity Shader编程-一/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yoyo_sincerely">
@@ -282,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Unity3D游戏资源提取工具与实测</h1>
+          <h1 class="post-title" itemprop="name headline">Unity中的基础光照</h1>
         
 
         <div class="post-meta">
@@ -294,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T20:29:52+08:00">
-                2017-07-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-07T00:00:00+08:00">
+                2017-08-07
               </time>
             
 
@@ -304,6 +302,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index">
+                    <span itemprop="name">Unity</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -329,22 +349,56 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这几天一直缺素材，然后想到从apk中提取点。嘿嘿。<br>这里总结一下找到的一些素材提取工具，以及其效果。</p>
+        <h1 id="模拟现实世界的光照"><a href="#模拟现实世界的光照" class="headerlink" title="模拟现实世界的光照"></a>模拟现实世界的光照</h1><p>在模拟真实的光照环境时，需要考虑3种物理现象。</p>
 <blockquote>
 <ul>
-<li><a href="https://github.com/ata4/disunity/releases" target="_blank" rel="external">Disunity</a></li>
-<li><a href="http://forum.xentax.com/viewtopic.php?f=10&amp;t=10085" target="_blank" rel="external">UnityAssetsExplorer</a></li>
-<li><a href="https://github.com/RaduMC/UnityStudio/releases" target="_blank" rel="external">UnityStudio</a></li>
-<li><a href="https://7daystodie.com/forums/showthread.php?22675-Unity-Assets-Bundle-Extractor" target="_blank" rel="external">UnityAssetsBundleExtractor</a></li>
-<li>图片转换插件<a href="http://community.imgtec.com/developers/powervr/installers/" target="_blank" rel="external">PowerVR Tools</a></li>
+<li>首先，光线从光源(light source)中被发射出来</li>
+<li>然后，光线和场景中的物体相交：一些被物体吸收了，而另一些光线被散射到其他方向。</li>
+<li>最后，摄像机吸收了一些光，产生了一张图片。</li>
 </ul>
 </blockquote>
-<h2 id="Disunity古老的开源工具，好像已经停止更新了，不支持unity5-x的版本。"><a href="#Disunity古老的开源工具，好像已经停止更新了，不支持unity5-x的版本。" class="headerlink" title="Disunity古老的开源工具，好像已经停止更新了，不支持unity5.x的版本。"></a><a href="https://github.com/ata4/disunity/releases" target="_blank" rel="external">Disunity</a>古老的开源工具，好像已经停止更新了，不支持unity5.x的版本。</h2><p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/disunity.png?raw=true" alt="disunity"></p>
-<h2 id="UnityAssetsExplorer很多外国人都推荐用这个，界面不错，最新版支持unity5-x-不过下载要翻墙。"><a href="#UnityAssetsExplorer很多外国人都推荐用这个，界面不错，最新版支持unity5-x-不过下载要翻墙。" class="headerlink" title="UnityAssetsExplorer很多外国人都推荐用这个，界面不错，最新版支持unity5.x,不过下载要翻墙。"></a><a href="http://forum.xentax.com/viewtopic.php?f=10&amp;t=10085" target="_blank" rel="external">UnityAssetsExplorer</a>很多外国人都推荐用这个，界面不错，最新版支持unity5.x,不过下载要翻墙。</h2><p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/UnityAssetsExplorer.png?raw=true" alt="UnityAssetsExplorer"></p>
-<h2 id="UnityStudio可视化界面，可以批量导出贴图，模型，字体，音频等，可以预览，最新版已经支持Unity5-x-（推荐使用）"><a href="#UnityStudio可视化界面，可以批量导出贴图，模型，字体，音频等，可以预览，最新版已经支持Unity5-x-（推荐使用）" class="headerlink" title="UnityStudio可视化界面，可以批量导出贴图，模型，字体，音频等，可以预览，最新版已经支持Unity5.x （推荐使用）"></a><a href="https://github.com/RaduMC/UnityStudio/releases" target="_blank" rel="external">UnityStudio</a>可视化界面，可以批量导出贴图，模型，字体，音频等，可以预览，最新版已经支持Unity5.x （推荐使用）</h2><p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/UnityStudioPic.png?raw=true" alt="UnityStudio"></p>
-<h2 id="UnityAssetsBundleExtractor同样是可视化界面，是目前对unity5-x支持比较好的工具，可以提取资源和修改后的回编，就是不能批量导出模型，这很坑啊。不过作者分享了此工具的API-C-，可以试试自己写个轮子。"><a href="#UnityAssetsBundleExtractor同样是可视化界面，是目前对unity5-x支持比较好的工具，可以提取资源和修改后的回编，就是不能批量导出模型，这很坑啊。不过作者分享了此工具的API-C-，可以试试自己写个轮子。" class="headerlink" title="UnityAssetsBundleExtractor同样是可视化界面，是目前对unity5.x支持比较好的工具，可以提取资源和修改后的回编，就是不能批量导出模型，这很坑啊。不过作者分享了此工具的API(C++)，可以试试自己写个轮子。"></a><a href="https://7daystodie.com/forums/showthread.php?22675-Unity-Assets-Bundle-Extractor" target="_blank" rel="external">UnityAssetsBundleExtractor</a>同样是可视化界面，是目前对unity5.x支持比较好的工具，可以提取资源和修改后的回编，就是不能批量导出模型，这很坑啊。不过作者分享了此工具的API(C++)，可以试试自己写个轮子。</h2><p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/UnityAssetsBundleExtractor.png?raw=true" alt="UnityAssetsBundleExtractor"></p>
-<h2 id="图片转换插件PowerVR-Tools有很多图片导出后的格式是ktx、tga、dds、pvr格式的，需要用这个软件转换成png的。"><a href="#图片转换插件PowerVR-Tools有很多图片导出后的格式是ktx、tga、dds、pvr格式的，需要用这个软件转换成png的。" class="headerlink" title="图片转换插件PowerVR Tools有很多图片导出后的格式是ktx、tga、dds、pvr格式的，需要用这个软件转换成png的。"></a>图片转换插件<a href="http://community.imgtec.com/developers/powervr/installers/" target="_blank" rel="external">PowerVR Tools</a>有很多图片导出后的格式是ktx、tga、dds、pvr格式的，需要用这个软件转换成png的。</h2><p>对于有一些需要翻墙的软件，我上传到了网盘中哦。</p>
-<p>链接：<a href="http://pan.baidu.com/s/1gfsxHGB" target="_blank" rel="external">http://pan.baidu.com/s/1gfsxHGB</a> 密码：8x6a</p>
+<h1 id="标准光照模型"><a href="#标准光照模型" class="headerlink" title="标准光照模型"></a>标准光照模型</h1><p>在1975年，著名学者裴祥风(Bui Toung Phong)提出了标准光照模型背后的基本理念。标准光照模型只关心直接光照(direct light)，也就是那些直接从光源发射出来照射到物体表面后，经过物体表面的一次反射直接进入摄像机的光线。<br>它的基本方法是，把进入到摄像机的光线分为4个部分，每个部分使用一种方法来计算它的贡献度。这四个部分是：</p>
+<blockquote>
+<ul>
+<li><strong> 自发光(emissive) </strong>部分，用C<sub>emissive</sub>来表示。这个部分用于描述当给定一个方向时，一个表面本身会向该方向发射多少辐射量。需要注意的是，如果没有使用全局光照(global illumination)技术，这些自发光的表面并不会真的照亮周围的物体，而是它本身看起来亮了。</li>
+<li><strong> 高光反射(specular) </strong>部分，用C<sub>specular</sub>来表示。这个部分用于描述当光线从光源照射到模型表面是，该表面会在完全镜面反射方向散射多少辐射量。</li>
+<li><strong> 漫反射(diffuse) </strong>部分，用C<sub>diffuse</sub>来表示。这个部分用于描述当光线从光源照射到模型表面是，该表面会向每个方向散射多少辐射量。</li>
+<li><strong> 环境光(ambient) </strong>部分，本书使用C<sub>ambient</sub>来表示。它用于描述其他的间接光照。</li>
+</ul>
+</blockquote>
+<h2 id="自发光"><a href="#自发光" class="headerlink" title="自发光"></a>自发光</h2><p>光线可以直接由光源发射进入摄影机，而不需要经过任何物体的反射。<br>自发光的计算很简单，就是直接使用了该材质的自发光颜色：</p>
+<blockquote>
+<p>C<sub>emissive</sub> = M<sub>emissive</sub></p>
+</blockquote>
+<h2 id="高光反射"><a href="#高光反射" class="headerlink" title="高光反射"></a>高光反射</h2><p>这里的高光反射式一种经验模型，也就是说，它并不完全符合真实世界中的高光反射现象。它可用于计算那些沿着完全镜面反射方向被反射的光线，这可以让物体看起来是有光泽的，例如金属材质。</p>
+<p>计算高光反射需要的信息包括：表面法线、视觉方向、光源方向、反射方向。在这四个矢量中，我们实际上只需要知道其中三个矢量即可，而第四个矢量–反射方向可以通过其他信息计算得到：</p>
+<blockquote>
+<p>r = 2 <em> $\overline{n}$ </em> I * $\overline{n}$ - I</p>
+</blockquote>
+<p>这样，我们可以利用Phong模型来计算高光反射的部分：<br><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/Phong%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E9%AB%98%E5%85%89%E5%8F%8D%E5%B0%84.png?raw=true" alt="Phong模型计算高光反射"></p>
+<blockquote>
+<p>C<sub>specular</sub> = C<sub>light</sub> * M<sub>specular</sub> * max(0, $\overline{n}$ * $\overline{r}$)<sup>m<sub>gloss</sub></sup></p>
+</blockquote>
+<p>其中，m<sub>gloss</sub>是材质的光泽度(gloss),也被称为反光度(shininess)。它用于控制高光区域的“亮点”有多宽，m<sub>gloss</sub>越大，亮点就越小。M<sub>specular</sub>是材质的高光反射颜色，它用于控制该材质对于高光反射的强度和颜色。C<sub>light</sub>则是光源的颜色和强度。这里需要防止$\overline{n}$ * $\overline{r}$的结果为负数。</p>
+<h2 id="漫反射"><a href="#漫反射" class="headerlink" title="漫反射"></a>漫反射</h2><p>漫反射光照符合兰伯特定律(Lambert’s law)：反射光线的强度与表面法线和光源方向之间的夹角的余弦值成正比。漫反射的计算公式为：</p>
+<blockquote>
+<p>C<sub>diffuse</sub> = (C<sub>light</sub> * M<sub>diffuse</sub>)max(0, $\overline{n}$ * $\overline{I}$)</p>
+</blockquote>
+<p>其中，$\overline{n}$是表面法线，$\overline{I}$是指光源的单位矢量，M<sub>diffuse</sub>是材质的漫反射颜色，C<sub>light</sub>是光源颜色。根据需求，0也可以换成其他小于1的数。</p>
+<h2 id="环境光"><a href="#环境光" class="headerlink" title="环境光"></a>环境光</h2><p>在现实世界中，物体也可以被间接光照所照亮。间接光照指，光线在多个物体之间反射，最后进入摄像机。例如：在红地毯上放置一个浅灰色沙发，那么沙发底部也会有红色，这些红色是由红地毯发射了一部分光线，再反弹到沙发上的。环境光公式为：</p>
+<blockquote>
+<p>C<sub>ambient</sub> = g<sub>ambient</sub></p>
+</blockquote>
+<h2 id="逐像素还是逐顶点"><a href="#逐像素还是逐顶点" class="headerlink" title="逐像素还是逐顶点"></a>逐像素还是逐顶点</h2><p>我们有了基本光照模型使用的数学公式，一般有两种选择来计算：</p>
+<blockquote>
+<ul>
+<li>在片元着色器中计算，也被叫逐像素光照</li>
+<li>在顶点着色器中计算，也被叫逐顶点光照</li>
+</ul>
+</blockquote>
+<h1 id="在Unity中实现光照效果"><a href="#在Unity中实现光照效果" class="headerlink" title="在Unity中实现光照效果"></a>在Unity中实现光照效果</h1><p>上面，我们给出了各种光照的公式，现在我们依次来实现光照效果。</p>
+<h2 id="环境光和自发光"><a href="#环境光和自发光" class="headerlink" title="环境光和自发光"></a>环境光和自发光</h2><p>在Unity中，场景中的环境光可以在Window-&gt;Lighting-&gt;Setting中控制。</p>
+<p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/Ambient.png?raw=true" alt="Ambient"></p>
 
       
     </div>
@@ -374,7 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Tools/" rel="tag"># 工具</a>
+            <a href="/tags/Unity-Shader/" rel="tag"># Unity Shader</a>
           
         </div>
       
@@ -387,8 +441,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/24/Unity中的光照/" rel="next" title="Unity中的基础光照">
-                <i class="fa fa-chevron-left"></i> Unity中的基础光照
+              <a href="/2017/08/02/正则表达式/" rel="next" title="正则表达式">
+                <i class="fa fa-chevron-left"></i> 正则表达式
               </a>
             
           </div>
@@ -397,8 +451,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/30/Unity全面优化/" rel="prev" title="Unity全面优化">
-                Unity全面优化 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/08/13/Lua语言基础/" rel="prev" title="Lua语言基础">
+                Lua语言基础 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -531,7 +585,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Disunity古老的开源工具，好像已经停止更新了，不支持unity5-x的版本。"><span class="nav-number">2.</span> <span class="nav-text">Disunity古老的开源工具，好像已经停止更新了，不支持unity5.x的版本。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnityAssetsExplorer很多外国人都推荐用这个，界面不错，最新版支持unity5-x-不过下载要翻墙。"><span class="nav-number">3.</span> <span class="nav-text">UnityAssetsExplorer很多外国人都推荐用这个，界面不错，最新版支持unity5.x,不过下载要翻墙。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnityStudio可视化界面，可以批量导出贴图，模型，字体，音频等，可以预览，最新版已经支持Unity5-x-（推荐使用）"><span class="nav-number">4.</span> <span class="nav-text">UnityStudio可视化界面，可以批量导出贴图，模型，字体，音频等，可以预览，最新版已经支持Unity5.x （推荐使用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnityAssetsBundleExtractor同样是可视化界面，是目前对unity5-x支持比较好的工具，可以提取资源和修改后的回编，就是不能批量导出模型，这很坑啊。不过作者分享了此工具的API-C-，可以试试自己写个轮子。"><span class="nav-number">5.</span> <span class="nav-text">UnityAssetsBundleExtractor同样是可视化界面，是目前对unity5.x支持比较好的工具，可以提取资源和修改后的回编，就是不能批量导出模型，这很坑啊。不过作者分享了此工具的API(C++)，可以试试自己写个轮子。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片转换插件PowerVR-Tools有很多图片导出后的格式是ktx、tga、dds、pvr格式的，需要用这个软件转换成png的。"><span class="nav-number">6.</span> <span class="nav-text">图片转换插件PowerVR Tools有很多图片导出后的格式是ktx、tga、dds、pvr格式的，需要用这个软件转换成png的。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟现实世界的光照"><span class="nav-number">1.</span> <span class="nav-text">模拟现实世界的光照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标准光照模型"><span class="nav-number">2.</span> <span class="nav-text">标准光照模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自发光"><span class="nav-number">2.1.</span> <span class="nav-text">自发光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高光反射"><span class="nav-number">2.2.</span> <span class="nav-text">高光反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漫反射"><span class="nav-number">2.3.</span> <span class="nav-text">漫反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境光"><span class="nav-number">2.4.</span> <span class="nav-text">环境光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逐像素还是逐顶点"><span class="nav-number">2.5.</span> <span class="nav-text">逐像素还是逐顶点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Unity中实现光照效果"><span class="nav-number">3.</span> <span class="nav-text">在Unity中实现光照效果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境光和自发光"><span class="nav-number">3.1.</span> <span class="nav-text">环境光和自发光</span></a></li></ol></li></ol></div>
             
 
           </div>
