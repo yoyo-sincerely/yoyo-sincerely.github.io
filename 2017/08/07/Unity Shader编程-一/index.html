@@ -102,7 +102,7 @@
 <meta property="og:description" content="模拟现实世界的光照在模拟真实的光照环境时，需要考虑3种物理现象。   首先，光线从光源(light source)中被发射出来 然后，光线和场景中的物体相交：一些被物体吸收了，而另一些光线被散射到其他方向。 最后，摄像机吸收了一些光，产生了一张图片。   标准光照模型在1975年，著名学者裴祥风(Bui Toung Phong)提出了标准光照模型背后的基本理念。标准光照模型只关心直接光照(dire">
 <meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/Phong%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E9%AB%98%E5%85%89%E5%8F%8D%E5%B0%84.png?raw=true">
 <meta property="og:image" content="https://github.com/yoyo-sincerely/MyPic/blob/master/Ambient.png?raw=true">
-<meta property="og:updated_time" content="2017-08-09T06:13:17.107Z">
+<meta property="og:updated_time" content="2017-08-27T13:22:41.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity中的基础光照">
 <meta name="twitter:description" content="模拟现实世界的光照在模拟真实的光照环境时，需要考虑3种物理现象。   首先，光线从光源(light source)中被发射出来 然后，光线和场景中的物体相交：一些被物体吸收了，而另一些光线被散射到其他方向。 最后，摄像机吸收了一些光，产生了一张图片。   标准光照模型在1975年，著名学者裴祥风(Bui Toung Phong)提出了标准光照模型背后的基本理念。标准光照模型只关心直接光照(dire">
@@ -373,7 +373,7 @@
 <h2 id="高光反射"><a href="#高光反射" class="headerlink" title="高光反射"></a>高光反射</h2><p>这里的高光反射式一种经验模型，也就是说，它并不完全符合真实世界中的高光反射现象。它可用于计算那些沿着完全镜面反射方向被反射的光线，这可以让物体看起来是有光泽的，例如金属材质。</p>
 <p>计算高光反射需要的信息包括：表面法线、视觉方向、光源方向、反射方向。在这四个矢量中，我们实际上只需要知道其中三个矢量即可，而第四个矢量–反射方向可以通过其他信息计算得到：</p>
 <blockquote>
-<p>r = 2 <em> $\overline{n}$ </em> I * $\overline{n}$ - I</p>
+<p>r = 2 * $\overline{n}$ * I * $\overline{n}$ - I</p>
 </blockquote>
 <p>这样，我们可以利用Phong模型来计算高光反射的部分：<br><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/Phong%E6%A8%A1%E5%9E%8B%E8%AE%A1%E7%AE%97%E9%AB%98%E5%85%89%E5%8F%8D%E5%B0%84.png?raw=true" alt="Phong模型计算高光反射"></p>
 <blockquote>
@@ -399,7 +399,227 @@
 <h1 id="在Unity中实现光照效果"><a href="#在Unity中实现光照效果" class="headerlink" title="在Unity中实现光照效果"></a>在Unity中实现光照效果</h1><p>上面，我们给出了各种光照的公式，现在我们依次来实现光照效果。</p>
 <h2 id="环境光和自发光"><a href="#环境光和自发光" class="headerlink" title="环境光和自发光"></a>环境光和自发光</h2><p>在Unity中，场景中的环境光可以在Window-&gt;Lighting-&gt;Setting中控制。</p>
 <p><img src="https://github.com/yoyo-sincerely/MyPic/blob/master/Ambient.png?raw=true" alt="Ambient"></p>
+<h2 id="漫反射-1"><a href="#漫反射-1" class="headerlink" title="漫反射"></a>漫反射</h2><p>漫反射公式：</p>
+<blockquote>
+<p>C<sub>diffuse</sub> = (C<sub>light</sub> * M<sub>diffuse</sub>)max(0, $\overline{n}$ * $\overline{I}$)</p>
+</blockquote>
+<p>其中，$\overline{n}$是表面法线，$\overline{I}$是指光源的单位矢量，M<sub>diffuse</sub>是材质的漫反射颜色，C<sub>light</sub>是光源颜色。根据需求，0也可以换成其他小于1的数。</p>
+<p>以下给出逐定点实现光照和逐像素实现光照代码：</p>
+<pre><code>Shader &quot;Unity Shaders Book/Chapter 6/Diffuse Vertex-Level&quot; {
+    Properties {
+        _Diffuse (&quot;Diffuse&quot;, Color) = (1, 1, 1, 1)
+    }
+    SubShader {
+        Pass { 
+            Tags { &quot;LightMode&quot;=&quot;ForwardBase&quot; }
 
+            CGPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include &quot;Lighting.cginc&quot;
+
+            fixed4 _Diffuse;
+
+            struct a2v {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
+
+            struct v2f {
+                float4 pos : SV_POSITION;
+                fixed3 color : COLOR;
+            };
+
+            v2f vert(a2v v) {
+                v2f o;
+                // Transform the vertex from object space to projection space
+                o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+
+                // Get ambient term
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
+                // Transform the normal from object space to world space
+                fixed3 worldNormal = normalize(mul(v.normal, (float3x3)_World2Object));
+                // Get the light direction in world space
+                fixed3 worldLight = normalize(_WorldSpaceLightPos0.xyz);
+                // Compute diffuse term
+                fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(worldNormal, worldLight));
+
+                o.color = ambient + diffuse;
+
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target {
+                return fixed4(i.color, 1.0);
+            }
+
+            ENDCG
+        }
+    }
+    FallBack &quot;Diffuse&quot;
+}
+</code></pre><p>我们现在来分析一下定点着色器vert:</p>
+<p>首先，使用Unity内置的模型<em>世界</em>投影矩阵UNITY_MATRIX_MVP来完成这样的坐标变换。<br>接下来，通过Unity的内置变量UNITY_LIGHTMODEL_AMBIENT得到环境光部分。<br>然后，就开始计算漫反射了，计算漫反射需要4个参数，在定义中可以找到材质的漫反射颜色_Diffuse以及定点法线v.normal。我们还需要知道光源颜色以及光源方向。Unity提供了一个内置变量_LightColor0来访问该Pass处理的光源的颜色和强度信息，而光源方向可以由_WorldSpaceLightPos0来得到。</p>
+<p>逐像素实现光照与逐顶点实现光照计算过程相同：</p>
+<pre><code>Shader &quot;Unity Shaders Book/Chapter 6/Diffuse Pixel-Level&quot; {
+    Properties {
+        _Diffuse (&quot;Diffuse&quot;, Color) = (1, 1, 1, 1)
+    }
+    SubShader {
+        Pass { 
+            Tags { &quot;LightMode&quot;=&quot;ForwardBase&quot; }
+
+            CGPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include &quot;Lighting.cginc&quot;
+
+            fixed4 _Diffuse;
+
+            struct a2v {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
+
+            struct v2f {
+                float4 pos : SV_POSITION;
+                float3 worldNormal : TEXCOORD0;
+            };
+
+            v2f vert(a2v v) {
+                v2f o;
+                // Transform the vertex from object space to projection space
+                o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+
+                // Transform the normal from object space to world space
+                o.worldNormal = mul(v.normal, (float3x3)_World2Object);
+
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target {
+                // Get ambient term
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
+                // Get the normal in world space
+                fixed3 worldNormal = normalize(i.worldNormal);
+                // Get the light direction in world space
+                fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+
+                // Compute diffuse term
+                fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(worldNormal, worldLightDir));
+
+                fixed3 color = ambient + diffuse;
+
+                return fixed4(color, 1.0);
+            }
+
+            ENDCG
+        }
+    } 
+    FallBack &quot;Diffuse&quot;
+}
+</code></pre><p><strong> 半兰伯特模型 </strong></p>
+<p>半兰伯特模型是Value公司在开发游戏《半条命》时提出的一种技术，由于该技术是在原兰伯特光照模型的基础上进行的一个简单修改，因此被称为半兰伯特模型：</p>
+<blockquote>
+<p>$C_{diffuse}$ = ($C_{light}$ * $M_{diffuse}$) * ($\alpha$ ($\overline{n}$ * $\overline{I}$) + $\beta$)</p>
+</blockquote>
+<!-- \*this text is surrounded by literal asterisks\* -->
+<!-- $\sum_{k=1}^n$ -->
+<p>在代码实现时在半兰伯特公式修改计算漫反射光照的部分：</p>
+<pre><code>fixed4 frag(v2f i) : SV_Target {
+    // Compute diffuse term
+    fixed halfLambert = dot(worldNormal, worldLightDir) * 0.5 + 0.5;
+    fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * halfLambert;
+
+    fixed3 color = ambient + diffuse;
+    return fixed4(color, 1.0)
+}
+</code></pre><h2 id="高光反射-1"><a href="#高光反射-1" class="headerlink" title="高光反射"></a>高光反射</h2><p>Blinn-Phong光照模型</p>
+<blockquote>
+<p>C<sub>specular</sub> = C<sub>light</sub> * M<sub>specular</sub> * max(0, $\overline{v}$ * $\overline{r}$)<sup>m<sub>gloss</sub></sup></p>
+</blockquote>
+<p>从公式可以看出，要计算高光反射需要知道4个参数：入射光线的颜色和强度$C_{light}$，材质的高光反射系数$M_{specular}$, 视角方向$\overline{v}$以及反射方向$\overline{r}$。其中反射方向$\overline{r}$可以由表面法线$\overline{n}$和光源方向$\overline{I}$计算得到：</p>
+<blockquote>
+<p> $\overline{r}$ = 2($\overline{v}$ * $\overline{I}$)$\overline{n}$ - $\overline{I}$</p>
+</blockquote>
+<p>在Unity中实现：<br>    // Upgrade NOTE: replaced ‘_Object2World’ with ‘unity_ObjectToWorld’<br>    // Upgrade NOTE: replaced ‘_World2Object’ with ‘unity_WorldToObject’<br>    // Upgrade NOTE: replaced ‘mul(UNITY_MATRIX_MVP,<em>)’ with ‘UnityObjectToClipPos(</em>)’</p>
+<pre><code>Shader &quot;Unity Shaders Book/Chapter 6/Specular Pixel-Level&quot; {
+    Properties {
+        _Diffuse (&quot;Diffuse&quot;, Color) = (1, 1, 1, 1)
+        _Specular (&quot;Specular&quot;, Color) = (1, 1, 1, 1)
+        _Gloss (&quot;Gloss&quot;, Range(8.0, 256)) = 20
+    }
+    SubShader {
+        Pass { 
+            Tags { &quot;LightMode&quot;=&quot;ForwardBase&quot; }
+
+            CGPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include &quot;Lighting.cginc&quot;
+
+            fixed4 _Diffuse;
+            fixed4 _Specular;
+            float _Gloss;
+
+            struct a2v {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            };
+
+            struct v2f {
+                float4 pos : SV_POSITION;
+                float3 worldNormal : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+            };
+
+            v2f vert(a2v v) {
+                v2f o;
+                // Transform the vertex from object space to projection space
+                o.pos = UnityObjectToClipPos(v.vertex);
+
+                // Transform the normal from object space to world space
+                o.worldNormal = mul(v.normal, (float3x3)unity_WorldToObject);
+                // Transform the vertex from object spacet to world space
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target {
+                // Get ambient term
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
+                fixed3 worldNormal = normalize(i.worldNormal);
+                fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+
+                // Compute diffuse term
+                fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(worldNormal, worldLightDir));
+
+                // Get the reflect direction in world space
+                fixed3 reflectDir = normalize(reflect(-worldLightDir, worldNormal));
+                // Get the view direction in world space
+                fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+                // Compute specular term
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(saturate(dot(reflectDir, viewDir)), _Gloss);
+
+                return fixed4(ambient + diffuse + specular, 1.0);
+            }
+
+            ENDCG
+        }
+    } 
+    FallBack &quot;Specular&quot;
+}
+</code></pre>
       
     </div>
 
@@ -585,7 +805,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟现实世界的光照"><span class="nav-number">1.</span> <span class="nav-text">模拟现实世界的光照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标准光照模型"><span class="nav-number">2.</span> <span class="nav-text">标准光照模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自发光"><span class="nav-number">2.1.</span> <span class="nav-text">自发光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高光反射"><span class="nav-number">2.2.</span> <span class="nav-text">高光反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漫反射"><span class="nav-number">2.3.</span> <span class="nav-text">漫反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境光"><span class="nav-number">2.4.</span> <span class="nav-text">环境光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逐像素还是逐顶点"><span class="nav-number">2.5.</span> <span class="nav-text">逐像素还是逐顶点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Unity中实现光照效果"><span class="nav-number">3.</span> <span class="nav-text">在Unity中实现光照效果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境光和自发光"><span class="nav-number">3.1.</span> <span class="nav-text">环境光和自发光</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟现实世界的光照"><span class="nav-number">1.</span> <span class="nav-text">模拟现实世界的光照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标准光照模型"><span class="nav-number">2.</span> <span class="nav-text">标准光照模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自发光"><span class="nav-number">2.1.</span> <span class="nav-text">自发光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高光反射"><span class="nav-number">2.2.</span> <span class="nav-text">高光反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漫反射"><span class="nav-number">2.3.</span> <span class="nav-text">漫反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境光"><span class="nav-number">2.4.</span> <span class="nav-text">环境光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逐像素还是逐顶点"><span class="nav-number">2.5.</span> <span class="nav-text">逐像素还是逐顶点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在Unity中实现光照效果"><span class="nav-number">3.</span> <span class="nav-text">在Unity中实现光照效果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境光和自发光"><span class="nav-number">3.1.</span> <span class="nav-text">环境光和自发光</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漫反射-1"><span class="nav-number">3.2.</span> <span class="nav-text">漫反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高光反射-1"><span class="nav-number">3.3.</span> <span class="nav-text">高光反射</span></a></li></ol></li></ol></div>
             
 
           </div>
